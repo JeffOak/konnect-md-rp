@@ -1,0 +1,1 @@
+net stop KncMdRpCliWeb && sc delete KncMdRpCliWeb

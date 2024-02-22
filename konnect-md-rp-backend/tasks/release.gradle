@@ -1,0 +1,74 @@
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
+import org.gradle.api.tasks.Input
+import org.gradle.api.InvalidUserDataException
+import org.gradle.api.tasks.Copy;
+
+abstract class CreateReleaseTask extends DefaultTask {
+
+    @Internal
+    def version;
+    @Internal
+    def release;
+    @Internal
+    def installerScriptx64 = "${project.projectDir.toString()}/resources/installer_script.iss";
+    @Internal
+    def gradleProps = "${project.projectDir.toString()}/gradle.properties";
+
+    @TaskAction
+    def createMenu() {
+        questionVersion()
+        questionRelease()
+        updateGradlePropsVersion()
+        updateInstallerScript()
+    }
+
+    def questionVersion() {
+        println "Version: "
+        version = System.in.newReader().readLine()
+    }
+
+    def questionRelease() {
+        try {
+            println "Release: Production [P], Alpha [A] or Beta [B]"
+            release = validateReleaseTypeResponse(System.in.newReader().readLine())
+        } catch (InvalidUserDataException e) {
+            println e.message
+            questionRelease()
+        }
+    }
+
+    def validateReleaseTypeResponse(response) {
+        switch (response.toUpperCase()) {
+            case ['ALPHA', 'A']:
+                return 'Alpha'
+                break
+            case ['BETA', 'B']:
+                return 'Beta'
+                break
+            case ['PRODUCTION', 'P']:
+                return ''
+                break
+            default:
+                throw new InvalidUserDataException("Please, choose de release: 'Production [P], Alpha [A] or Beta [B]'")
+        }
+    }
+
+    def updateGradlePropsVersion() {
+        String contents = new File(gradleProps).getText('UTF-8')
+        contents = contents.replaceAll("(?s)version=.*?\n", "version=${version}\n")
+        new File(gradleProps).write(contents, 'UTF-8')
+    }
+
+    def updateInstallerScript() {
+        String contents = new File(installerScriptx64).getText('UTF-8')
+        contents = contents
+                .replaceAll('(?s)#define MyAppVersion.*?\n',  \
+             "#define MyAppVersion \"${version}${release != '' ? ' - ' + release : ''}\"\n")
+                .replaceAll('(?s)OutputBaseFilename=Konnect_MD_LeCheff_.*?\n',  \
+             "OutputBaseFilename=Konnect_MD_LeCheff_${version}${release != '' ? '_' + release : ''}\n")
+        new File(installerScriptx64).write(contents, 'UTF-8')
+    }
+}
+
+tasks.register('createRelease', CreateReleaseTask)

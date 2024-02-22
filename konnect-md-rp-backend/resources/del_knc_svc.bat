@@ -1,0 +1,1 @@
+net stop KncMdRp && sc delete KncMdRp

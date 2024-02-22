@@ -1,0 +1,57 @@
+import org.gradle.api.DefaultTask
+import org.gradle.api.tasks.TaskAction
+import groovyx.net.http.*
+import groovy.json.JsonSlurper
+
+abstract class NotificationTask extends DefaultTask {
+
+    private String url
+    private String token
+    private String userId
+
+    @Option(option = "token", description = "Token of notification API")
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @Input
+    public String getToken() {
+        return token;
+    }
+
+    @Option(option = "userId", description = "ID of who will be notified")
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    @Input
+    public String getUserId() {
+        return userId;
+    }
+
+    @Option(option = "url", description = "URL of notification API")
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    @Input
+    public String getUrl() {
+        return url;
+    }
+
+    @TaskAction
+    def notificate() {
+        def post = new URL(getUrl()).openConnection();
+        String message = new File(project.projectDir.toString() + "/resources/temp/message.txt").getText('UTF-8')
+        String body = "{ \"number\" : \"55${getUserId()}\", \"body\" : \"${message}\" }"
+        post.setRequestMethod("POST")
+        post.setRequestProperty('Authorization', "Bearer ${getToken()}")
+        post.setDoOutput(true)
+        post.setRequestProperty("Content-Type", "application/json")
+        post.getOutputStream().write(body.replaceAll('(\r\n|\r|\n)', '\\\\n').getBytes("UTF-8"))
+        def responseCode = post.getResponseCode()
+        println body.replaceAll('(\r\n|\r|\n)', '\\\\n')
+    }
+}
+
+tasks.register('notificate', NotificationTask)

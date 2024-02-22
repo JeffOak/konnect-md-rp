@@ -1,0 +1,7 @@
+<service>
+    <id>KncMdRp</id>
+    <name>Konnect: Mais Delivery/LeCheff</name>
+    <description>Serviço de integração entre o Mais Delivery e o LeCheff</description>
+    <executable>C:\KonnectMDRP\lib\bin\java</executable>
+    <arguments>-jar C:\KonnectMDRP\lib\bin\kncmdrp\knc_md_rp.exe</arguments>
+</service>

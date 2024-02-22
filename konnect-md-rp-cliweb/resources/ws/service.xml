@@ -1,0 +1,6 @@
+<service>
+    <id>KncMdRpCliWeb</id>
+    <name>KonnectCliWeb: MaisDelivery/LeCheff</name>
+    <description>Interface Web do Konnect MaisDelivery/LeCheff</description>
+    <executable>C:\KonnectMDRP\lib\bin\ws\nginx</executable>
+</service>

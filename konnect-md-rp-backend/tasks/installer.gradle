@@ -1,0 +1,53 @@
+abstract class CreateInstallerTask extends DefaultTask {
+    
+    @Internal
+    def String innoExtractLink = 'https://kinfor.nyc3.digitaloceanspaces.com/Desenvolvimento/Ferramentas/innoextract.zip';
+    @Internal
+    def String innoSetupLink = 'https://kinfor.nyc3.digitaloceanspaces.com/Desenvolvimento/Ferramentas/innosetup.exe'
+    @Internal
+    def String firebirdLink = 'https://kinfor.nyc3.digitaloceanspaces.com/Desenvolvimento/Ferramentas/Firebird-3.0.8.33535_0_x64.exe';
+    @Internal
+    def String dir = "${project.projectDir}/resources";
+    
+    @TaskAction
+    def init(){
+        // Create temp dir, delete previous, if exists
+        executeCommand('cmd','/c (if exist temp rmdir temp /q /s) && mkdir temp')
+        dir  = "${project.projectDir}/resources/temp"
+        downloadFiles()
+        extractFiles()
+        dir = "${project.projectDir}/resources/temp/app"
+        createInstaller()
+    }
+    
+    def downloadFiles(){
+        println 'Downloading InnoExtract...'
+        executeCommand("cmd","/c curl ${innoExtractLink} -o innoextract.zip")
+        println 'Downloading InnoSetup...'
+        executeCommand("cmd","/c curl ${innoSetupLink} -o innosetup.exe")
+        println 'Downloading Firebird...'
+        executeCommand("cmd","/c curl ${firebirdLink} -o Firebird-3.0.8.33535_0_x64.exe")
+    }
+    
+    def extractFiles() {
+        println "Unziping downloaded InnoExtract..."
+        executeCommand("cmd","/c tar -xf innoextract.zip")
+        println "Extracting InnoSetup with InnoExtract..."
+        executeCommand("cmd","/c innoextract.exe innosetup.exe")
+    }
+    
+    def createInstaller(){
+        println "Creating installer..."
+        executeCommand("cmd","/c ISCC.exe ../../installer_script.iss")
+    }
+
+    
+    def executeCommand(String... args) {
+        project.exec {
+            workingDir dir
+            commandLine args
+        }
+    }
+}
+    
+tasks.register('createInstaller', CreateInstallerTask)
