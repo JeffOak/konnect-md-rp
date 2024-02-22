@@ -18,7 +18,6 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "20.x"
-        run: npm install && npm run build
       - name: Build release
         uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
         run: ./konnect-md-rp-backend/gradlew distribute
