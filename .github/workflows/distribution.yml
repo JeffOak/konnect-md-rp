@@ -39,6 +39,4 @@ jobs:
         run: echo "*Konnect Mais Delivery/LeCheff - ${{ github.event.release.name}}*`n`n${{ github.event.release.body}}`n*https://kinfor.nyc3.digitaloceanspaces.com/Konnect/Konnect_MD_LeCheff_${{github.event.release.tag_name}}.exe`n" > \a\konnect-md-rp\konnect-md-rp\konnect-md-rp-backend\resources\temp\message.txt
       - name: Notify release to channels
         working-directory: ./konnect-md-rp-backend
-        uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-        with:
-          arguments: notificate --url=${{ secrets.NOTIFICATION_API_URL}} --token=${{ secrets.NOTIFICATION_API_TOKEN}} --userId=${{ secrets.NOTIFICATION_USER_ID}}
+        run: ./gradlew notificate --url=${{ secrets.NOTIFICATION_API_URL}} --token=${{ secrets.NOTIFICATION_API_TOKEN}} --userId=${{ secrets.NOTIFICATION_USER_ID}}
