@@ -25,7 +25,7 @@ jobs:
         uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
       - name: Build Java Service Backend
         working-directory: ./konnect-md-rp-backend
-        run: gradlew distribute
+        run: ./gradlew distribute
       - name: Upload to Digital Ocean
         uses: BetaHuhn/do-spaces-action@v2
         with:
