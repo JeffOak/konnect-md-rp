@@ -36,7 +36,7 @@ jobs:
           source: output
           out_dir: Konnect
       - name: Create releases notes
-        run: echo "*Konnect Mais Delivery/LeCheff - ${{ github.event.release.name}}*`n`n${{ github.event.release.body}}`n*https://kinfor.nyc3.digitaloceanspaces.com/Konnect/Konnect_MD_LeCheff_${{github.event.release.tag_name}}.exe`n" > \a\konnect-md-rp\konnect-md-rp\message.txt
+        run: echo "*Konnect Mais Delivery/LeCheff - ${{ github.event.release.name}}*`n`n${{ github.event.release.body}}`n*https://kinfor.nyc3.digitaloceanspaces.com/Konnect/Konnect_MD_LeCheff_${{github.event.release.tag_name}}.exe`n" > \a\konnect-md-rp\konnect-md-rp\konnect-md-rp-backend\resources\temp\message.txt
       - name: Notify release to channels
         uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
         with:
