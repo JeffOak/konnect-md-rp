@@ -28,13 +28,12 @@ jobs:
         run: ./gradlew distribute
       - name: Upload to Digital Ocean
         uses: BetaHuhn/do-spaces-action@v2
-        working-directory: ./konnect-md-rp-backend
         with:
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
           secret_key: ${{ secrets.SPACES_SECRET_KEY }}
           space_name: ${{ secrets.SPACES_NAME }}
           space_region: ${{ secrets.SPACES_REGION }}
-          source: output
+          source: ./konnect-md-rp-backend/output
           out_dir: Konnect
       - name: Create releases notes
         run: echo "*Konnect Mais Delivery/LeCheff - ${{ github.event.release.name}}*`n`n${{ github.event.release.body}}`n*https://kinfor.nyc3.digitaloceanspaces.com/Konnect/Konnect_MD_LeCheff_${{github.event.release.tag_name}}.exe`n" > \a\konnect-md-rp\konnect-md-rp\konnect-md-rp-backend\resources\temp\message.txt
