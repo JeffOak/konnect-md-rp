@@ -27,6 +27,7 @@ jobs:
         working-directory: ./konnect-md-rp-backend
         run: ./gradlew distribute
       - name: Upload to Digital Ocean
+        working-directory: ./konnect-md-rp-backend
         uses: BetaHuhn/do-spaces-action@v2
         with:
           access_key: ${{ secrets.SPACES_ACCESS_KEY }}
