@@ -14,15 +14,16 @@ jobs:
         with:
           java-version: "1.8"
           java-package: jdk+fx
-      - name: Use Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20.x"
-          arguments: npm install && npm run build
-      - name: Build release
+      - name: Install Dependencies and Build Web Client
+        run: npm install && npm run build
+      - name: Setup Gradle
         uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
-        with:
-          arguments: ./konnect-md-rp-backend/gradlew distribute
+      - name: Build Java Service Backend
+        run: ./konnect-md-rp-backend/gradlew distribute
       - name: Upload to Digital Ocean
         uses: BetaHuhn/do-spaces-action@v2
         with:
